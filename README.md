@@ -58,7 +58,13 @@ Where:
 
 ---
 
-## 4. Codebase Architecture
+## 4. Roadmap
+
+- **[Thermoregulatory & Altitude Temperature Coupling Model](docs/thermoregulatory_altitude_model.md)** — Advanced physiological energetics extension modeling altitude-dependent ambient temperature $T(h)$, metabolic thermoregulation power overhead $P_{\text{thermo}}(T)$, and mechanical power coupling via Kirchhoff circuit analogy (focusing on external environmental factors).
+
+---
+
+## 5. Codebase Architecture
 
 ```
 srmr2026/
@@ -71,7 +77,8 @@ srmr2026/
 │   ├── assets/
 │   │   ├── elevation_profile.png              # Terrain & rider position plot
 │   │   └── model_comparison_projection.png   # Naive vs Two-Track finish curve
-│   └── two_track_model_story.md               # Full mathematical narrative doc
+│   ├── two_track_model_story.md               # Full mathematical narrative doc
+│   └── thermoregulatory_altitude_model.md     # Thermoregulatory & altitude model
 │
 ├── src/
 │   ├── __init__.py
@@ -79,11 +86,13 @@ srmr2026/
 │   ├── models.py                              # NaiveLinearModel & TwoTrackModel
 │   ├── calibration.py                         # Bounded least-squares optimizer
 │   ├── generate_plots.py                      # Matplotlib plot generator
+│   ├── thermo_model.py                        # Thermoregulatory & altitude model
 │   └── reporter.py                            # Rich CLI tables
 │
 ├── tests/
 │   ├── test_gpx_parser.py                     # Parser unit tests
-│   └── test_models.py                         # Model unit tests
+│   ├── test_models.py                         # Model unit tests
+│   └── test_thermo_model.py                   # Thermo model unit tests
 │
 ├── main.py                                    # CLI entrypoint
 ├── requirements.txt                           # Dependencies
@@ -92,7 +101,7 @@ srmr2026/
 
 ---
 
-## 5. Quickstart & CLI Commands
+## 6. Quickstart & CLI Commands
 
 ### Environment Setup
 ```bash
