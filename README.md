@@ -6,9 +6,10 @@ A modular Python framework for real-time race tracking, predictive time estimati
 
 ## 1. External Resources & Links
 
-- **Official Website:** [Silk Road Mountain Race (The Mountain Races)](https://themountainraces.cc)
-- **Live Dot Watching:** [DotWatcher.cc SRMR Coverage](https://dotwatcher.cc)
-- **Official Podcast:** [The Mountain Races Podcast on Spotify](https://open.spotify.com/show/368P15c6j8K07Jz0F98xJp) (or search *"The Mountain Races Podcast"* on Spotify)
+- **Official Race Website:** [Silk Road Mountain Race 2026](https://www.themountainraces.cc/srmr2026)
+- **Live Dot Watching:** [SRMR 2026 MAProgress Tracking](https://srmr2026.maprogress.com/)
+- **Official Podcast:** [The Mountain Races Podcast on Spotify](https://open.spotify.com/show/36v8Hy0VofuPnfapp8ZOD1)
+- **Course GPX Route Source:** [RideWithGPS Route #53318000](https://ridewithgps.com/routes/53318000)
 
 ---
 
