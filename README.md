@@ -60,7 +60,7 @@ Where:
 
 ## 4. Roadmap
 
-- **[Thermoregulatory & Altitude Temperature Coupling Model](docs/thermoregulatory_altitude_model.md)** — Advanced physiological energetics extension modeling altitude-dependent ambient temperature $T(h)$, metabolic thermoregulation power overhead $P_{\text{thermo}}(T)$, and mechanical power coupling via Kirchhoff circuit analogy (focusing on external environmental factors).
+- **[Thermoregulatory & Altitude Temperature Coupling Model](docs/thermoregulatory_altitude_model.md)** — Advanced physiological energetics extension modeling altitude-dependent ambient temperature $T(h)$, metabolic thermoregulation power overhead $P_{\text{thermo}}(T)$, and mechanical power coupling $P_{\text{mech}} = P_{\text{total}} - P_{\text{thermo}}(T)$ (focusing strictly on external environmental factors).
 
 ---
 

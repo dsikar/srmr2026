@@ -2,7 +2,7 @@
 Thermoregulatory & Altitude Temperature Coupling Model (External Factors Only).
 
 Models altitude-dependent ambient temperature T(h), metabolic thermoregulation
-power overhead P_thermo(T), and mechanical power coupling via Kirchhoff circuit analogy.
+power overhead P_thermo(T), and mechanical power coupling P_mech = P_total - P_thermo.
 """
 
 from dataclasses import dataclass
@@ -96,14 +96,10 @@ def evaluate_thermo_budget(
 ) -> ThermoBudgetReport:
     """
     Evaluates energy paid (Days 1-2) vs projected remaining energy demand,
-    accounting for Kirchhoff-style metabolic power dissipation.
+    accounting for metabolic thermoregulatory power overhead.
     """
-    # 1. Evaluate historical segment (0 to checkpoint)
-    paid_thermo_joules = 0.0
-    paid_mech_joules = 0.0
     paid_hours = 51.0
 
-    # Calculate average altitude across Days 1-2 profile
     cp_elevs = elevations_m[:checkpoint_idx+1]
     avg_alt_cp = float(np.mean(cp_elevs))
     temp_cp, p_thermo_cp, p_mech_cp = calculate_available_mechanical_power(avg_alt_cp)
@@ -114,20 +110,13 @@ def evaluate_thermo_budget(
     paid_thermo_kcal = paid_thermo_joules / 4184.0
     paid_total_kcal = (paid_thermo_joules + paid_mech_joules) / 4184.0
 
-    # 2. Evaluate remaining profile (checkpoint to finish)
     rem_elevs = elevations_m[checkpoint_idx:]
-    rem_dists = distances_km[checkpoint_idx:] - distances_km[checkpoint_idx]
 
-    # Sector 2 (600-1400 km) and Sector 3 (1400-2062 km) analysis
-    # Sector 2 average altitude ~ 2000m -> T ~ 25°C -> slight heat overhead
-    # Sector 3 average altitude ~ 3200m -> T ~ 9°C -> cold defense + extreme climbing gradient
     avg_alt_rem = float(np.mean(rem_elevs))
     temp_rem, p_thermo_rem, p_mech_rem = calculate_available_mechanical_power(avg_alt_rem)
 
-    # Speed attenuation ratio due to thermal dissipation
     thermal_power_ratio = p_mech_rem / P_SUSTAINABLE_WATTS
 
-    # Adjusted remaining velocities
     adj_v_d = base_v_d * math.sqrt(thermal_power_ratio)
     adj_v_h = base_v_h * thermal_power_ratio
 

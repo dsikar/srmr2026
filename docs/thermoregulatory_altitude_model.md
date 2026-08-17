@@ -39,15 +39,15 @@ $$E_{\text{thermo}} = \int P_{\text{thermo}}(T(h(s)), v(s)) \, dt = \int \frac{P
 
 ---
 
-### 1.3 Power-Velocity Coupling & Kirchhoff Network Analogy
+### 1.3 Power-Velocity Coupling
 
-Treating total sustainable metabolic output $P_{\text{total\_available}} = 250\text{ W}$ as a potential source in a Kirchhoff circuit analogy, thermoregulation operates as an internal shunt dissipation loss:
+With total sustainable gross metabolic power capacity $P_{\text{total}} = 250\text{ W}$, thermoregulatory overhead reduces available mechanical power output:
 
-$$P_{\text{mechanical}}(t) = P_{\text{total\_available}} - P_{\text{thermo}}(t)$$
+$$P_{\text{mech}}(t) = P_{\text{total}} - P_{\text{thermo}}(t)$$
 
-As available mechanical power decreases under extreme thermal stress (either extreme heat in valleys or extreme cold on high passes), rolling speed $v_d$ and vertical ascent rate $v_h$ scale according to available mechanical output:
+As available mechanical power decreases under extreme thermal strain (either extreme heat in low valleys or extreme cold on high passes), rolling speed $v_d$ and vertical ascent rate $v_h$ scale according to available mechanical output:
 
-$$\eta_{\text{thermal}} = \frac{P_{\text{mechanical}}}{P_{\text{total\_available}}}$$
+$$\eta_{\text{thermal}} = \frac{P_{\text{mech}}}{P_{\text{total}}}$$
 
 $$v_d(T) = v_{d,0} \cdot \sqrt{\eta_{\text{thermal}}}, \quad v_h(T) = v_{h,0} \cdot \eta_{\text{thermal}}$$
 
