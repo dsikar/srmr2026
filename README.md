@@ -10,6 +10,7 @@ A modular Python framework for real-time race tracking, predictive time estimati
 - **Live Dot Watching:** [SRMR 2026 MAProgress Tracking](https://srmr2026.maprogress.com/)
 - **Official Podcast:** [The Mountain Races Podcast on Spotify](https://open.spotify.com/show/36v8Hy0VofuPnfapp8ZOD1)
 - **Course GPX Route Source:** [RideWithGPS Route #53318000](https://ridewithgps.com/routes/53318000)
+- **Josh Ibbett's YouTube Channel:** [Josh Ibbett on YouTube](https://www.youtube.com/@joshibbett)
 
 ---
 
