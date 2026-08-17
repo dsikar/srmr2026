@@ -2,5 +2,6 @@
 __pycache__/
 *.pyc
 .pytest_cache/
-*.png
 .DS_Store
+*.png
+!docs/assets/*.png

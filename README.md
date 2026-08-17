@@ -13,36 +13,51 @@ A modular Python framework for real-time race tracking, predictive time estimati
 
 ---
 
-## 2. Background & Mathematical Model
+## 2. Race Projections & Visual Analysis
 
-The Silk Road Mountain Race is an ultra-endurance bikepacking race across Kyrgyzstan:
-- **Total Course Distance:** 2,062 km
-- **Total Elevation Gain:** +36,490 m
+### Model Comparison & Finish Time Projection
+![SRMR 2026 Finish Projection](docs/assets/model_comparison_projection.png)
 
-A naive linear extrapolation ($T = D / v_{\text{avg}}$) fails because the course topography is heavily front/back-loaded:
-- **0–600 km:** ~15.0 m/km climbing density
-- **600–1,400 km:** ~10.5 m/km climbing density (faster rolling plateau and descents)
-- **1,400–2,062 km:** ~28.5–30.0 m/km climbing density (6 major passes peaking near 3,900 m with hike-a-bike)
-
-### The Two-Track Model
-
-We decouple horizontal rolling work from vertical elevation ascent (Naismith / Minetti principle):
-
-$$T_{\text{total}} = T_{\text{distance}} + T_{\text{elevation}} = \frac{D}{v_d} + \frac{H_{\text{gain}}}{v_h}$$
-
-Where:
-- $D$: Course distance (km)
-- $H_{\text{gain}}$: Cumulative elevation gain (m)
-- $v_d$: Distance rate / rolling velocity (km/h) [Calibrated: $21.5\text{ km/h}$]
-- $v_h$: Elevation rate / Vertical Ascent Meters per hour (VAM) [Calibrated: $450\text{ m/h}$]
-
-### Baseline Calibration
-- **Default Baseline Projection:** $177.0\text{ hours}$ (7 days, 9 hours)
-- **Projected Final Average Speed:** $11.65\text{ km/h}$
+### Course Elevation & Rider Progress Profile
+![SRMR 2026 Elevation Profile](docs/assets/elevation_profile.png)
 
 ---
 
-## 3. Codebase Architecture
+## 3. The Story: Why Linear Speed Extrapolation Fails
+
+At Checkpoint 1 (51 hours elapsed, 657 km completed, +9,200 m elevation gain), a racer holds a naive average speed of **12.88 km/h**. A simple linear extrapolation ($T = D / v_{\text{avg}}$) predicts a finish in **160 hours (6 days, 16 hours)**.
+
+However, linear extrapolation fails because the course topography is severely back-loaded with 6 major high-altitude passes:
+- **0–600 km:** ~15.0 m/km climbing density (front-loaded climbs)
+- **600–1,400 km:** ~10.5 m/km climbing density (fast rolling plateau)
+- **1,400–2,062 km:** ~28.5–30.0 m/km climbing density (high mountain passes up to 3,900 m)
+
+### The Two-Track Model Hook (Naismith / Minetti Reductionism)
+
+We decouple the route into independent horizontal rolling work and vertical climbing ascent:
+
+$$T = T_{\text{distance}} + T_{\text{climb}} = \frac{D}{v_0} + \frac{H_{\text{gain}}}{VAM}$$
+
+Where:
+- $v_0 \approx 21.5\text{ km/h}$ (Calibrated flat/rolling speed)
+- $VAM \approx 450\text{ m/h}$ (Vertical Ascent Meters per hour)
+
+### Projected Winner Finish Time
+
+| Component | Calculation | Time |
+| :--- | :--- | :---: |
+| **Horizontal Track ($T_{\text{distance}}$)** | $2,062\text{ km} \div 21.5\text{ km/h}$ | **95.9 hours** |
+| **Vertical Track ($T_{\text{climb}}$)** | $36,490\text{ m} \div 450\text{ m/h}$ | **81.1 hours** |
+| **Total Estimated Race Time** | $95.9\text{ h} + 81.1\text{ h}$ | **177.0 hours (~7d 9h)** |
+
+- **Predicted Final Average Speed:** **11.65 km/h** (down from the naive 12.88 km/h)
+- **Remaining Time from km 657:** **126 hours (~5 days, 6 hours)**
+
+👉 **[Read the Full Mathematical Story & Deep-Dive](docs/two_track_model_story.md)**
+
+---
+
+## 4. Codebase Architecture
 
 ```
 srmr2026/
@@ -51,29 +66,32 @@ srmr2026/
 │   │   └── Silk_Road_Mountain_Race_2026.gpx   # Official course GPX track
 │   └── checkpoints.json                       # Racer checkpoint history
 │
+├── docs/
+│   ├── assets/
+│   │   ├── elevation_profile.png              # Terrain & rider position plot
+│   │   └── model_comparison_projection.png   # Naive vs Two-Track finish curve
+│   └── two_track_model_story.md               # Full mathematical narrative doc
+│
 ├── src/
 │   ├── __init__.py
-│   ├── gpx_parser.py                          # GPX parsing, elevation smoothing & sector analysis
-│   ├── models.py                              # NaiveLinearModel & TwoTrackModel implementations
-│   ├── calibration.py                         # Bounded least-squares regression for (v_d, v_h)
-│   └── reporter.py                            # Rich CLI tables & Matplotlib elevation plotter
+│   ├── gpx_parser.py                          # GPX parsing & sector analysis
+│   ├── models.py                              # NaiveLinearModel & TwoTrackModel
+│   ├── calibration.py                         # Bounded least-squares optimizer
+│   ├── generate_plots.py                      # Matplotlib plot generator
+│   └── reporter.py                            # Rich CLI tables
 │
 ├── tests/
 │   ├── test_gpx_parser.py                     # Parser unit tests
-│   └── test_models.py                         # Model & calibration unit tests
+│   └── test_models.py                         # Model unit tests
 │
-├── prompts/
-│   ├── 01-smrs2026-analysis.md
-│   └── 02-readme-and-github.md
-│
-├── main.py                                    # Typer CLI entrypoint
-├── requirements.txt                           # Package dependencies
+├── main.py                                    # CLI entrypoint
+├── requirements.txt                           # Dependencies
 └── README.md
 ```
 
 ---
 
-## 4. Installation & Quickstart
+## 5. Quickstart & CLI Commands
 
 ### Environment Setup
 ```bash
@@ -82,35 +100,20 @@ source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
----
-
-## 5. CLI Usage Commands
-
-### 1. Summarize Course Terrain & Sectors
+### CLI Commands
 ```bash
+# 1. Summarize course terrain sectors
 python main.py track --gpx data/gpx/Silk_Road_Mountain_Race_2026.gpx
-```
 
-### 2. Log Checkpoint & Compare Models
-```bash
+# 2. Log a checkpoint and compare model projections
 python main.py checkpoint --time "2d 3h" --dist 657 --ele 9200
-```
-Outputs a comparison table between the **Naive Linear Model** and the **Two-Track Decoupled Model**.
 
-### 3. Display Current Race Status Summary
-```bash
+# 3. View current race status summary
 python main.py summary
-```
 
-### 4. Generate Elevation Profile Plot
-```bash
-python main.py plot --output elevation_profile.png
-```
+# 4. Re-generate visual plots
+python src/generate_plots.py
 
----
-
-## 6. Running Tests
-
-```bash
+# 5. Run test suite
 pytest -v
 ```
