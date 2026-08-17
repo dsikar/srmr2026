@@ -1,0 +1,10 @@
+[
+    {
+        "id": 1,
+        "name": "CP1 Baseline (Day 2 + 3h)",
+        "elapsed_hours": 51.0,
+        "distance_km": 657.0,
+        "elevation_gain_m": 9200.0,
+        "timestamp_str": "Day 2 + 3h"
+    }
+]
